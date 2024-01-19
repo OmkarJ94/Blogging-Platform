@@ -15,7 +15,7 @@ import { BlogModule } from './blog/blog.module';
       useFactory: (configservice: ConfigService) => {
 
         return {
-          uri: configservice.get('URI'),
+          uri: configservice.get('MONGO_URI'),
         };
       },
       inject: [ConfigService],

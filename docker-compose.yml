@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: 'mongo:latest'
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: 'Blogging-Platform'
+
+  nestjs-app:
+    build:
+      context: .
+      dockerfile: DockerFile
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:dev
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: 'mongodb://mongodb:27017/Blogging-Platform'
