@@ -43,8 +43,9 @@ This NestJS Blogging Platform API provides a robust backend for a blogging appli
 
 3.Mongodb Database
 
-4.Docker
-
+### If you have docker
+ Clone or pull repository
+ Execute following command
 ```bash
 docker-compose up
 ```
