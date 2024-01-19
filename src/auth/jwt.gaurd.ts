@@ -7,10 +7,6 @@ import {
   Optional,
   UnauthorizedException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { AuthService } from './auth.service';
-import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
