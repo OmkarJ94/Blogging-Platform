@@ -38,8 +38,18 @@ This NestJS Blogging Platform API provides a robust backend for a blogging appli
 ## Requirements
 
 1.Nodejs
+
 2.Nestjs CLI
+
 3.Mongodb Database
+
+4.Docker
+
+```bash
+docker-compose up
+```
+
+
 ## Installation
 
 ```bash
