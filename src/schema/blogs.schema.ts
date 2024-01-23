@@ -9,7 +9,7 @@ export class Blog {
   @Prop({ required: true, type: Types.ObjectId })
   user: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ required: true,minlength:5 })
   title: string;
 
   @Prop({ required: true, maxlength: 140 })

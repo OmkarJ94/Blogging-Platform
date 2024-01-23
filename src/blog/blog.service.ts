@@ -27,7 +27,7 @@ export class BlogService {
         message:"Blog added successfully"
       };
     } catch (error) {
-      
+      console.log(error)
       throw new UnauthorizedException();
     }
   }
@@ -58,6 +58,7 @@ export class BlogService {
       message:`You like a blog with id ${id} successfully`
     }
    } catch (error) {
+    console.log(error)
     throw new UnauthorizedException()
    }
   }

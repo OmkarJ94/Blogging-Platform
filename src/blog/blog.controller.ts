@@ -18,38 +18,134 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Types } from 'mongoose';
 import { AddCommentDto } from './dto/add-comment.dto';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @Controller('blog')
+@ApiTags('Blogs Api')
 export class BlogController {
   constructor(
     private readonly blogService: BlogService,
     private readonly jwtService: JwtService,
   ) {}
 
+  //Api for add the blog
   @Post('/addblog')
+  @ApiOperation({ summary: 'This api is for add the blog' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
+          description: 'Title of the blog (minimum of length 5)',
+        },
+        content: {
+          type: 'string',
+          description: 'content of the blog (maximum of length 140)',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Blog added successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized(check all fields and route)',
+  })
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   AddBlog(@Body() blog: CreateBlogDto, @Req() req: Request) {
-    
     return this.blogService.addBlog(blog, req);
   }
 
+  //Api for the like the blog
   @Post('/like/:id')
+  @ApiOperation({ summary: 'This api is for like the blog' })
+  @ApiParam({
+    name: 'id',
+    type: 'mongodb id',
+    description: 'This is id of blog which user want to like',
+    required:true
+  })
+
+  @ApiResponse({
+    status: 200,
+    description: 'Blog added successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized(check all fields and route)',
+  })
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   likeBlog(@Param('id') id: string, @Req() req: Request) {
     return this.blogService.likeBlog(id, req);
   }
+
+
+  //Api for the get all blogs of particular user
   @Get('/getallblogs/:id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'This api is for get all blog' })
+  @ApiParam({
+    name: 'id',
+    type: 'number',
+    description: 'This is id of user  whose blogs are required',
+    required:true
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Blog liked successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized(check all fields and route)',
+  })
   @UseGuards(AuthGuard)
   getAllBlogs(@Param('id', ParseIntPipe) id: number) {
     return this.blogService.getAllBlog(id);
   }
 
+
+//Api for addcomment on a blog
   @Post('/addcomment/:id')
+  @ApiOperation({ summary: 'This api is for adding comment to the blog' })
+  @ApiParam({
+    name: 'id',
+    type: 'mongodb id',
+    description: 'This is id of blog to which user want to add a comment',
+    required:true
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'comment added successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized(check all fields and route)',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        content: {
+          type: 'string',
+          description: 'content of the comment',
+        },
+      },
+    },
+  })
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
-
   addComment(
     @Param('id') id: Types.ObjectId,
     @Body() addCommentDto: AddCommentDto,
@@ -58,7 +154,35 @@ export class BlogController {
     return this.blogService.addComment(id, addCommentDto, req);
   }
 
+  //Api for like the comment
   @Post('/likecomment')
+  @ApiOperation({ summary: 'This api is for like a comment of the blog' })
+  @ApiQuery(
+    {
+    name: 'Comment Id',
+    type: 'mongodb id',
+    description: 'This is id of comment which is comment on blog with Blog Id',
+    required:true
+    }
+  )
+  @ApiQuery(
+    {
+    name: 'Blog Id',
+    type: 'mongodb id',
+    description: 'This is id of blog to which user want to add a comment',
+    required:true
+    }
+  )
+ 
+  @ApiResponse({
+    status: 201,
+    description: 'like the blog successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized(check all fields and route)',
+  })
+
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   likeComment(
@@ -69,19 +193,77 @@ export class BlogController {
     return this.blogService.likeComment(blogId, commentId, req);
   }
 
+//Api for the get all comments of particular blog
   @Get('/getallcomments/:id')
+  @ApiOperation({ summary: 'This api is for get all comments' })
+  @ApiParam({
+    name: 'id',
+    type: 'mongodb id',
+    description: 'This is id of blgs whose comment are required',
+    required:true
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Return all comments',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized(check all fields and route)',
+  })
   @UseGuards(AuthGuard)
   getAllComment(@Param('id') id: Types.ObjectId) {
     return this.blogService.getAllComments(id);
   }
 
+  //Api for getting like count of blog
   @Get('/getlikecount/:id')
+  @ApiOperation({ summary: 'This api is for get like count of particular blog' })
+  @ApiParam({
+    name: 'id',
+    type: 'mongodb id',
+    description: 'This is id of blog whose like coun is required',
+    required:true
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Return the like count',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized(check all fields and route)',
+  })
   @UseGuards(AuthGuard)
   getlikecount(@Param('id') id: Types.ObjectId) {
     return this.blogService.getCountOfBlogLikes(id);
   }
 
+  //Api for the getting like count on comment on blog
   @Get('/getcommentlikecount')
+  @ApiOperation({ summary: 'This api is for get like count of comment on blog' })
+  @ApiQuery(
+    {
+    name: 'Comment Id',
+    type: 'mongodb id',
+    description: 'This is id of comment which is comment on blog with Blog Id',
+    required:true
+    }
+  )
+  @ApiQuery(
+    {
+    name: 'Blog Id',
+    type: 'mongodb id',
+    description: 'This is id of blog to which user want to add a comment',
+    required:true
+    }
+  )
+  @ApiResponse({
+    status: 200,
+    description: 'Blog liked successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized(check all fields and route)',
+  })
   @UseGuards(AuthGuard)
   getcommentlikecount(
     @Query('blogId') blogId: Types.ObjectId,
