@@ -141,3 +141,11 @@ GET - Get all comments
 http://localhost:3000/blog/getallcomments/:id
 ```
 Param: id (ID of the blog to get comment)
+
+
+
+Swagger
+```Bash
+http://localhost:3000/api-docs
+```
+
