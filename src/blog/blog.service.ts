@@ -27,7 +27,7 @@ export class BlogService {
         message:"Blog added successfully"
       };
     } catch (error) {
-      console.log(error)
+      
       throw new UnauthorizedException();
     }
   }
@@ -52,13 +52,18 @@ export class BlogService {
       message:"You already like a blog"
     }
     }
-    blog.like.push(req['id']);
-    await blog.save();
+    
+    const updated=await this.blogModel.updateOne( 
+       {_id:id},
+      {$set:{like:req["id"]}},
+      { new: true } 
+    )
+
     return{
       message:`You like a blog with id ${id} successfully`
     }
    } catch (error) {
-    console.log(error)
+    
     throw new UnauthorizedException()
    }
   }
@@ -71,21 +76,13 @@ export class BlogService {
   ) {
     try {
       const { content } = addCommentDto;
-      const blog = await this.blogModel.findById(id);
-
-      if (!blog) {
-       return {
-        message:`Blog with with id ${id} is not present`
-       }
-      }
-
-      blog.comments.push({
-        id: new Types.ObjectId(),
-        content,
-        user: req['id'],
-      });
-
-      blog.save();
+   
+      const updated=await this.blogModel.findByIdAndUpdate(id,{$push:{comments:{
+          id: new Types.ObjectId(),
+          content,
+          user: req['id'],
+        }
+      }})
 
       return {
         message:"Comment added successfully"
@@ -104,28 +101,11 @@ export class BlogService {
     req: Request,
   ) {
     try {
-      const blog = await this.blogModel.findById(blogId);
-      if (!blog) {
-        return {
-         message:`Blog with with id ${blogId} is not present`
-        }
-       }
-
-      const comment = blog.comments.find((comment) =>
-        comment.id.equals(new Types.ObjectId(commentId)),
-      );
-      if (!comment) {
-        return {
-         message:`comment with with id ${commentId} is not present`
-        }
-       }
-
-      blog.comment_liked.push({
-        comment_id: commentId,
-        user: req['id'],
-      });
-
-      await blog.save();
+      const updated=await this.blogModel.findByIdAndUpdate(blogId,{$push:{comment_liked:{
+           comment_id: commentId,
+           user: req['id'],
+        }}})
+   
 
       return {
         message:"Comment like successfully"
