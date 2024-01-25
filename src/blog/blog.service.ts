@@ -23,7 +23,7 @@ export class BlogService {
         message: 'Blog added successfully',
       };
     } catch (error) {
-      console.log(error)
+      
       throw new UnauthorizedException();
     }
   }
@@ -34,7 +34,7 @@ export class BlogService {
       const blogs = this.blogModel.find({ user: id });
       return blogs;
     } catch (error) {
-      console.log(error)
+      
       throw new UnauthorizedException();
     }
   }
@@ -136,11 +136,12 @@ export class BlogService {
         message: 'Comment like successfully',
       };
     } catch (error) {
-      console.log(error);
+      
       throw new UnauthorizedException('something went wrong');
     }
   }
 
+  //get all comments
   async getAllComments(id: Types.ObjectId): Promise<object> {
     try {
       const blog = await this.blogModel.findById(id);
@@ -159,7 +160,7 @@ export class BlogService {
       throw new UnauthorizedException('something went wrong');
     }
   }
-
+//get count of likes on comment
   async getCountOfCommentLikes(
     blogId: Types.ObjectId,
     commentId: Types.ObjectId,
