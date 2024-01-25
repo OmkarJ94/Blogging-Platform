@@ -12,10 +12,11 @@ export class AuthService {
     private jwtservice: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string) {
+  async validateUser(username: string, pass: string) :Promise<object>{
     
    try {
     const user = await this.usersService.findOne(username);
+ 
     if (user.password !== pass || !user) {
       throw new UnauthorizedException();
     }

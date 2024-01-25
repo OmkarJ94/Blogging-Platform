@@ -9,6 +9,7 @@ async function bootstrap() {
   .setTitle('Blogging Plaform')
   .setDescription('Blogging Platfom')
   .setVersion('1.0')
+  .addBearerAuth()
   .build();
 
 const document = SwaggerModule.createDocument(app, options);

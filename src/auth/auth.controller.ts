@@ -32,7 +32,7 @@ export class AuthController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Blog added successfully',
+    description: 'Login successfully',
   })
   @ApiResponse({
     status: 401,

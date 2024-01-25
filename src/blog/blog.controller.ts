@@ -19,6 +19,7 @@ import { Request } from 'express';
 import { Types } from 'mongoose';
 import { AddCommentDto } from './dto/add-comment.dto';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -61,6 +62,7 @@ export class BlogController {
     status: 401,
     description: 'Unauthorized(check all fields and route)',
   })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   AddBlog(@Body() blog: CreateBlogDto, @Req() req: Request) {
@@ -68,14 +70,15 @@ export class BlogController {
   }
 
   //Api for the like the blog
-  @Post('/like/:id')
+  @Post('/like/:blogId')
   @ApiOperation({ summary: 'This api is for like the blog' })
   @ApiParam({
-    name: 'id',
-    type: 'mongodb id',
+    name: 'blogId',
+    type: "string",
     description: 'This is id of blog which user want to like',
     required:true
   })
+  @ApiBearerAuth()
 
   @ApiResponse({
     status: 200,
@@ -87,21 +90,22 @@ export class BlogController {
   })
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
-  likeBlog(@Param('id') id: string, @Req() req: Request) {
+  likeBlog(@Param('blogId') id: string, @Req() req: Request) {
     return this.blogService.likeBlog(id, req);
   }
 
 
   //Api for the get all blogs of particular user
-  @Get('/getallblogs/:id')
+  @Get('/getallblogs/:userId')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'This api is for get all blog' })
   @ApiParam({
-    name: 'id',
+    name: 'userId',
     type: 'number',
     description: 'This is id of user  whose blogs are required',
     required:true
   })
+  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'Blog liked successfully',
@@ -111,17 +115,17 @@ export class BlogController {
     description: 'Unauthorized(check all fields and route)',
   })
   @UseGuards(AuthGuard)
-  getAllBlogs(@Param('id', ParseIntPipe) id: number) {
+  getAllBlogs(@Param('userId', ParseIntPipe) id: number) {
     return this.blogService.getAllBlog(id);
   }
 
 
 //Api for addcomment on a blog
-  @Post('/addcomment/:id')
+  @Post('/addcomment/:blogId')
   @ApiOperation({ summary: 'This api is for adding comment to the blog' })
   @ApiParam({
-    name: 'id',
-    type: 'mongodb id',
+    name: 'blogId',
+    type: 'string',
     description: 'This is id of blog to which user want to add a comment',
     required:true
   })
@@ -144,10 +148,11 @@ export class BlogController {
       },
     },
   })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   addComment(
-    @Param('id') id: Types.ObjectId,
+    @Param('blogId') id: Types.ObjectId,
     @Body() addCommentDto: AddCommentDto,
     @Req() req: Request,
   ) {
@@ -159,16 +164,16 @@ export class BlogController {
   @ApiOperation({ summary: 'This api is for like a comment of the blog' })
   @ApiQuery(
     {
-    name: 'Comment Id',
-    type: 'mongodb id',
+    name: 'commentId',
+    type: 'string',
     description: 'This is id of comment which is comment on blog with Blog Id',
     required:true
     }
   )
   @ApiQuery(
     {
-    name: 'Blog Id',
-    type: 'mongodb id',
+    name: 'blogId',
+    type: 'string',
     description: 'This is id of blog to which user want to add a comment',
     required:true
     }
@@ -185,6 +190,7 @@ export class BlogController {
 
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   likeComment(
     @Query('blogId') blogId: Types.ObjectId,
     @Query('commentId') commentId: Types.ObjectId,
@@ -194,11 +200,11 @@ export class BlogController {
   }
 
 //Api for the get all comments of particular blog
-  @Get('/getallcomments/:id')
+  @Get('/getallcomments/:blogId')
   @ApiOperation({ summary: 'This api is for get all comments' })
   @ApiParam({
-    name: 'id',
-    type: 'mongodb id',
+    name: 'blogId',
+    type: 'string',
     description: 'This is id of blgs whose comment are required',
     required:true
   })
@@ -210,17 +216,18 @@ export class BlogController {
     status: 401,
     description: 'Unauthorized(check all fields and route)',
   })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  getAllComment(@Param('id') id: Types.ObjectId) {
+  getAllComment(@Param('blogId') id: Types.ObjectId) {
     return this.blogService.getAllComments(id);
   }
 
   //Api for getting like count of blog
-  @Get('/getlikecount/:id')
+  @Get('/getlikecount/:blogId')
   @ApiOperation({ summary: 'This api is for get like count of particular blog' })
   @ApiParam({
-    name: 'id',
-    type: 'mongodb id',
+    name: 'blogId',
+    type: 'string',
     description: 'This is id of blog whose like coun is required',
     required:true
   })
@@ -232,8 +239,9 @@ export class BlogController {
     status: 401,
     description: 'Unauthorized(check all fields and route)',
   })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
-  getlikecount(@Param('id') id: Types.ObjectId) {
+  getlikecount(@Param('blogId') id: Types.ObjectId) {
     return this.blogService.getCountOfBlogLikes(id);
   }
 
@@ -242,16 +250,16 @@ export class BlogController {
   @ApiOperation({ summary: 'This api is for get like count of comment on blog' })
   @ApiQuery(
     {
-    name: 'Comment Id',
-    type: 'mongodb id',
+    name: 'commentId',
+    type: 'string',
     description: 'This is id of comment which is comment on blog with Blog Id',
     required:true
     }
   )
   @ApiQuery(
     {
-    name: 'Blog Id',
-    type: 'mongodb id',
+    name: 'blogId',
+    type: 'string',
     description: 'This is id of blog to which user want to add a comment',
     required:true
     }
@@ -264,6 +272,7 @@ export class BlogController {
     status: 401,
     description: 'Unauthorized(check all fields and route)',
   })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   getcommentlikecount(
     @Query('blogId') blogId: Types.ObjectId,
