@@ -21,6 +21,7 @@ import { AddCommentDto } from './dto/add-comment.dto';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiCreatedResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -39,21 +40,6 @@ export class BlogController {
   //Api for add the blog
   @Post('/addblog')
   @ApiOperation({ summary: 'This api is for add the blog' })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        title: {
-          type: 'string',
-          description: 'Title of the blog (minimum of length 5)',
-        },
-        content: {
-          type: 'string',
-          description: 'content of the blog (maximum of length 140)',
-        },
-      },
-    },
-  })
   @ApiResponse({
     status: 201,
     description: 'Blog added successfully',
@@ -79,7 +65,6 @@ export class BlogController {
     required:true
   })
   @ApiBearerAuth()
-
   @ApiResponse({
     status: 200,
     description: 'Blog added successfully',
@@ -137,17 +122,8 @@ export class BlogController {
     status: 401,
     description: 'Unauthorized(check all fields and route)',
   })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        content: {
-          type: 'string',
-          description: 'content of the comment',
-        },
-      },
-    },
-  })
+
+
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)

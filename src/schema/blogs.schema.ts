@@ -6,8 +6,8 @@ import {  Types } from 'mongoose';
   timestamps: true,
 })
 export class Blog {
-  @Prop({ required: true, type: Types.ObjectId })
-  user: Types.ObjectId;
+  @Prop({ required: true, type: Number })
+  user: number;
 
   @Prop({ required: true,minlength:5 })
   title: string;

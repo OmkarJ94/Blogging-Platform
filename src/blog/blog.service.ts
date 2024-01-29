@@ -23,7 +23,6 @@ export class BlogService {
         message: 'Blog added successfully',
       };
     } catch (error) {
-      
       throw new UnauthorizedException();
     }
   }
