@@ -60,9 +60,9 @@ export class BlogController {
   @ApiOperation({ summary: 'This api is for like the blog' })
   @ApiParam({
     name: 'blogId',
-    type: "string",
+    type: 'string',
     description: 'This is id of blog which user want to like',
-    required:true
+    required: true,
   })
   @ApiBearerAuth()
   @ApiResponse({
@@ -79,7 +79,6 @@ export class BlogController {
     return this.blogService.likeBlog(id, req);
   }
 
-
   //Api for the get all blogs of particular user
   @Get('/getallblogs/:userId')
   @HttpCode(HttpStatus.OK)
@@ -88,7 +87,7 @@ export class BlogController {
     name: 'userId',
     type: 'number',
     description: 'This is id of user  whose blogs are required',
-    required:true
+    required: true,
   })
   @ApiBearerAuth()
   @ApiResponse({
@@ -104,15 +103,14 @@ export class BlogController {
     return this.blogService.getAllBlog(id);
   }
 
-
-//Api for addcomment on a blog
+  //Api for addcomment on a blog
   @Post('/addcomment/:blogId')
   @ApiOperation({ summary: 'This api is for adding comment to the blog' })
   @ApiParam({
     name: 'blogId',
     type: 'string',
     description: 'This is id of blog to which user want to add a comment',
-    required:true
+    required: true,
   })
   @ApiResponse({
     status: 201,
@@ -122,8 +120,6 @@ export class BlogController {
     status: 401,
     description: 'Unauthorized(check all fields and route)',
   })
-
-
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
@@ -138,23 +134,18 @@ export class BlogController {
   //Api for like the comment
   @Post('/likecomment')
   @ApiOperation({ summary: 'This api is for like a comment of the blog' })
-  @ApiQuery(
-    {
+  @ApiQuery({
     name: 'commentId',
     type: 'string',
     description: 'This is id of comment which is comment on blog with Blog Id',
-    required:true
-    }
-  )
-  @ApiQuery(
-    {
+    required: true,
+  })
+  @ApiQuery({
     name: 'blogId',
     type: 'string',
     description: 'This is id of blog to which user want to add a comment',
-    required:true
-    }
-  )
- 
+    required: true,
+  })
   @ApiResponse({
     status: 201,
     description: 'like the blog successfully',
@@ -163,7 +154,6 @@ export class BlogController {
     status: 401,
     description: 'Unauthorized(check all fields and route)',
   })
-
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
@@ -175,14 +165,14 @@ export class BlogController {
     return this.blogService.likeComment(blogId, commentId, req);
   }
 
-//Api for the get all comments of particular blog
+  //Api for the get all comments of particular blog
   @Get('/getallcomments/:blogId')
   @ApiOperation({ summary: 'This api is for get all comments' })
   @ApiParam({
     name: 'blogId',
     type: 'string',
     description: 'This is id of blgs whose comment are required',
-    required:true
+    required: true,
   })
   @ApiResponse({
     status: 200,
@@ -200,12 +190,14 @@ export class BlogController {
 
   //Api for getting like count of blog
   @Get('/getlikecount/:blogId')
-  @ApiOperation({ summary: 'This api is for get like count of particular blog' })
+  @ApiOperation({
+    summary: 'This api is for get like count of particular blog',
+  })
   @ApiParam({
     name: 'blogId',
     type: 'string',
     description: 'This is id of blog whose like coun is required',
-    required:true
+    required: true,
   })
   @ApiResponse({
     status: 200,
@@ -223,23 +215,21 @@ export class BlogController {
 
   //Api for the getting like count on comment on blog
   @Get('/getcommentlikecount')
-  @ApiOperation({ summary: 'This api is for get like count of comment on blog' })
-  @ApiQuery(
-    {
+  @ApiOperation({
+    summary: 'This api is for get like count of comment on blog',
+  })
+  @ApiQuery({
     name: 'commentId',
     type: 'string',
     description: 'This is id of comment which is comment on blog with Blog Id',
-    required:true
-    }
-  )
-  @ApiQuery(
-    {
+    required: true,
+  })
+  @ApiQuery({
     name: 'blogId',
     type: 'string',
     description: 'This is id of blog to which user want to add a comment',
-    required:true
-    }
-  )
+    required: true,
+  })
   @ApiResponse({
     status: 200,
     description: 'Blog liked successfully',

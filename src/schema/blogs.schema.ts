@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import {  Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 @Schema({
   collection: 'Blog',
@@ -9,10 +9,10 @@ export class Blog {
   @Prop({ required: true, type: Number })
   user: number;
 
-  @Prop({ required: true,minlength:5 })
+  @Prop({ required: true, minlength: 5 })
   title: string;
 
-  @Prop({ required: true, maxlength: 140 })
+  @Prop({ required: true, maxlength: 140, minlength: 5 })
   content: string;
 
   @Prop({ default: [] })

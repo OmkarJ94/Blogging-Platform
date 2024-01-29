@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -12,22 +9,21 @@ export class AuthService {
     private jwtservice: JwtService,
   ) {}
 
-  async validateUser(username: string, pass: string) :Promise<object>{
-    
-   try {
-    const user = await this.usersService.findOne(username);
- 
-    if (user.password !== pass || !user) {
-      throw new UnauthorizedException();
+  async validateUser(username: string, pass: string): Promise<object> {
+    try {
+      const user = await this.usersService.findOne(username);
+
+      if (user.password !== pass || !user) {
+        throw new UnauthorizedException();
+      }
+      const token = this.jwtservice.sign({ id: user.userId });
+
+      return {
+        message: 'Login Successfully',
+        token,
+      };
+    } catch (error) {
+      throw new UnauthorizedException('Something went wrong');
     }
-    const token = this.jwtservice.sign({ id: user.userId });
- 
-    return {
-      message:"Login Successfully",
-      token 
-    };
-   } catch (error) {
-    throw new UnauthorizedException("Something went wrong")
-   }
   }
 }

@@ -33,7 +33,6 @@ export class BlogService {
       const blogs = this.blogModel.find({ user: id });
       return blogs;
     } catch (error) {
-      
       throw new UnauthorizedException();
     }
   }
@@ -135,7 +134,6 @@ export class BlogService {
         message: 'Comment like successfully',
       };
     } catch (error) {
-      
       throw new UnauthorizedException('something went wrong');
     }
   }
@@ -159,7 +157,7 @@ export class BlogService {
       throw new UnauthorizedException('something went wrong');
     }
   }
-//get count of likes on comment
+  //get count of likes on comment
   async getCountOfCommentLikes(
     blogId: Types.ObjectId,
     commentId: Types.ObjectId,

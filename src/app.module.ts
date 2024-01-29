@@ -13,7 +13,6 @@ import { BlogModule } from './blog/blog.module';
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     MongooseModule.forRootAsync({
       useFactory: (configservice: ConfigService) => {
-
         return {
           uri: configservice.get('MONGO_URI'),
         };

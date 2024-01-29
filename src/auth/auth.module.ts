@@ -23,7 +23,7 @@ import { AuthGuard } from './jwt.gaurd';
     // MongooseModule.forFeature([{ name: User.name, schema: userSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService,AuthGuard],
+  providers: [AuthService, AuthGuard],
   exports: [AuthGuard],
 })
 export class AuthModule {}
