@@ -18,12 +18,8 @@ export class LoginUserDto {
   username: string;
 
   @IsString()
-  @MinLength(3)
-  @MaxLength(5)
   @ApiProperty({
     description: 'password of the user',
-    minLength: 3,
-    maxLength: 5,
     required: true,
   })
   password: string;
